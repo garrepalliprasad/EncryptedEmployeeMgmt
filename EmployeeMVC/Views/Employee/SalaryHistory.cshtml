@@ -1,0 +1,27 @@
+﻿@model IEnumerable<MonthlySalary>
+@{
+    ViewData["Title"] = "Employee Salary History";
+}
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Month</th>
+            <th>Salary</th>
+            <th>Leave Count</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var salary in Model)
+        {
+            <tr>
+                <td>@salary.Id</td>
+                <td>@salary.Month</td>
+                <td>@salary.Salary</td>
+                <td>@salary.LC</td>
+            </tr>
+        }
+    </tbody>
+</table>
+<a asp-action="Index" asp-controller="Employee">Back</a>

@@ -1,0 +1,29 @@
+﻿@model IEnumerable<Employee>
+@{
+    ViewData["Title"] = "Employee List Page";
+}
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Name</th>
+            <th>DOJ</th>
+            <th>CTC</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var employee in Model)
+        {
+            <tr>
+                <td>@employee.Id</td>
+                <td>@employee.Name</td>
+                <td>@employee.DOJ</td>
+                <td>@employee.CTC</td>
+                <td>
+                    <a asp-action="SalaryHistory" asp-controller="Employee" asp-route-Eid=@employee.Id>Show Salary History</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

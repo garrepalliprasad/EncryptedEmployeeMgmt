@@ -1,0 +1,21 @@
+﻿@model EncryptedEmployeeMgmt.Models.Employee
+@{
+    ViewData["Title"] = "Create New Employee";
+}
+<h3>Salary Details</h3>
+<form asp-action="AddEmployee">
+    <div class="mb-3 mt-3">
+        <label asp-for="Name" class="col-form-label-sm"></label>
+        <input asp-for="Name" class="form-control" />
+    </div>
+    <div class="mt-1">
+        <label asp-for="DOJ" class="col-form-label-sm"></label>
+        <input asp-for="DOJ" class="form-control" />
+    </div>
+    <div class="mt-1">
+        <label asp-for="CTC" class="col-form-label-sm"></label>
+        <input asp-for="CTC" class="form-control" />
+    </div>
+    
+    <button type="submit" class="btn btn-primary mt-1">Add</button>
+</form>
