@@ -9,8 +9,4 @@
     <ProjectReference Include="..\EmployeeLibrary\EmployeeLibrary.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Models\" />
-  </ItemGroup>
-
 </Project>

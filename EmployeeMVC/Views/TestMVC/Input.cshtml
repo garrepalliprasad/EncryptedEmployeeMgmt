@@ -1,0 +1,15 @@
+﻿@model EmployeeMVC.Models.InputValue
+@{
+    ViewData["Title"] = "Input Page";
+}
+<form asp-action="input" asp-controller="testmvc">
+    <div>
+        <label asp-for="Value1"></label>
+        <input asp-for="Value1" />
+    </div>
+    <div>
+        <label asp-for="Value2"></label>
+        <input asp-for="Value2" />
+    </div>
+    <button type="submit">Submit</button>
+</form>
