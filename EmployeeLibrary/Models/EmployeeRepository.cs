@@ -22,14 +22,14 @@ namespace EncryptedEmployeeMgmt.Models
             return _context.Employees.FirstOrDefault(e=> e.Id == id);
         }
 
-        public int GetEmployeeCTC(int id)
+        public string GetEmployeeCTC(int id)
         {
             return _context.Employees.FirstOrDefault(e => e.Id == id).CTC;
         }
 
-        public int GetEmployeeSalary(int id)
+        public string GetEmployeeSalary(int id)
         {
-            return (_context.Employees.FirstOrDefault(e => e.Id == id).CTC) / 12; 
+            return _context.Employees.FirstOrDefault(e => e.Id == id).Salary;
         }
 
         public Employee CreateEmployee(Employee employee)

@@ -26,13 +26,16 @@ namespace EmployeeLibrary.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("CTC")
-                        .HasColumnType("int");
+                    b.Property<string>("CTC")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("DOJ")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Salary")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -56,8 +59,8 @@ namespace EmployeeLibrary.Migrations
                     b.Property<int>("Month")
                         .HasColumnType("int");
 
-                    b.Property<int>("Salary")
-                        .HasColumnType("int");
+                    b.Property<string>("Salary")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 

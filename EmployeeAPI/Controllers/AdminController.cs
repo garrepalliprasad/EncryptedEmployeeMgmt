@@ -33,8 +33,8 @@ namespace EmployeeAPI.Controllers
         [Route("monthsalary")]
         public IActionResult GetMonthSalary(int eid, Month month)
         {
-            int salary = _salaryRepository.GetEmployeeMonthSalary(eid, month);
-            if (salary == 0)
+            string salary = _salaryRepository.GetEmployeeMonthSalary(eid, month);
+            if (salary == null)
             {
                 return BadRequest("Employee Not Exist in the Month of " + month.ToString());
             }

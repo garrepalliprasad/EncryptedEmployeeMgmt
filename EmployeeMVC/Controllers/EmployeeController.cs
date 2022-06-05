@@ -1,4 +1,6 @@
-﻿using EncryptedEmployeeMgmt.Models;
+﻿using EmployeeLibrary.Utilities;
+using EmployeeMVC.ViewModels;
+using EncryptedEmployeeMgmt.Models;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System;
@@ -13,10 +15,12 @@ namespace EmployeeMVC.Controllers
     {
         private readonly HttpClient _http;
         private  HttpResponseMessage _response=null;
+        private readonly Utilities _utilities;
         public EmployeeController()
         {
             _http = new HttpClient();
             _http.BaseAddress = new Uri("https://localhost:44350/api/admin/");
+            _utilities = new Utilities();
         }
         
         public async Task<IActionResult> Index()
@@ -66,12 +70,19 @@ namespace EmployeeMVC.Controllers
         [HttpGet]
         public IActionResult AddEmployee()
         {
-            Employee employee = new Employee();
+            EmployeeViewModel employee = new EmployeeViewModel();
             return View(employee);
         }
         [HttpPost]
-        public async Task<IActionResult> AddEmployee(Employee employee)
+        public async Task<IActionResult> AddEmployee(EmployeeViewModel employeeViewModel)
         {
+            Employee employee = new Employee()
+            {
+                Name = employeeViewModel.Name,
+                DOJ=employeeViewModel.DOJ,
+                CTC=_utilities.,
+
+            };
             StringContent content = new StringContent(JsonConvert.SerializeObject(employee), Encoding.UTF8, "application/json");
             _response = await _http.PostAsync("addemployee", content);
             if (_response.IsSuccessStatusCode)

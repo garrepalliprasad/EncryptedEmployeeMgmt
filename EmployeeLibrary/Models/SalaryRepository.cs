@@ -12,19 +12,19 @@ namespace EncryptedEmployeeMgmt.Models
             _context = context;
         }
 
-        public int GetEmployeeMonthSalary(int Eid, Month month)
+        public string GetEmployeeMonthSalary(int Eid, Month month)
         {
             MonthlySalary monthlySalary = _context.Salaries.FirstOrDefault(s => s.Employee.Id == Eid && s.Month == month);
             if(monthlySalary == null)
             {
-                return 0;
+                return null;
             }
             return monthlySalary.Salary;
         }
 
-        public int GetEmployeeSalarySum(int Eid,Month from, Month to)
+        public List<string> GetEmployeeSalarySum(int Eid,Month from, Month to)
         {
-            return _context.Salaries.Where(s => s.Month >= from && s.Month <= to && s.Employee.Id==Eid).Sum(s => s.Salary);
+            return _context.Salaries.Where(s => s.Month >= from && s.Month <= to && s.Employee.Id==Eid).Select(ms=>ms.Salary).ToList();
         }
 
         public void AddSalary(MonthlySalary salary)

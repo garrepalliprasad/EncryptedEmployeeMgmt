@@ -6,8 +6,8 @@ namespace EncryptedEmployeeMgmt.Models
     {
         Employee GetEmployee(int id);
         List<Employee> GetAllEmployees();
-        int GetEmployeeCTC(int id);
-        int GetEmployeeSalary(int id);
+        string GetEmployeeCTC(int id);
+        string GetEmployeeSalary(int id);
         Employee CreateEmployee(Employee employee);
         int GetJoinedMonth(int id);
     }

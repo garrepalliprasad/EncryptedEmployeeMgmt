@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EmployeeLibrary.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20220604080515_InitialMigration")]
-    partial class InitialMigration
+    [Migration("20220605083448_InitialMigrationForEncryptedSalary")]
+    partial class InitialMigrationForEncryptedSalary
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -28,13 +28,16 @@ namespace EmployeeLibrary.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("CTC")
-                        .HasColumnType("int");
+                    b.Property<string>("CTC")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("DOJ")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Salary")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -58,8 +61,8 @@ namespace EmployeeLibrary.Migrations
                     b.Property<int>("Month")
                         .HasColumnType("int");
 
-                    b.Property<int>("Salary")
-                        .HasColumnType("int");
+                    b.Property<string>("Salary")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 

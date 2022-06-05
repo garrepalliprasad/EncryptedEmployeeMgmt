@@ -28,7 +28,7 @@ namespace EmployeeAPI
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<AppDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("HEMConnection")));
+            services.AddDbContext<AppDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("EEMConnection")));
             services.AddControllers();
             services.AddScoped<IEmployeeRepository, EmployeeRepository>();
             services.AddScoped<ISalaryRepository,SalaryRepository>();

@@ -4,7 +4,7 @@
     {
         public int Id { get; set; }
         public Month Month { get; set; }
-        public int Salary { get; set; }
+        public string Salary { get; set; }
         public int LC { get; set; }
         public Employee Employee { get; set; }
     }
