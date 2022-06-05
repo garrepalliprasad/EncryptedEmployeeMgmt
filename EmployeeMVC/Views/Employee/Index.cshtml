@@ -8,7 +8,8 @@
             <th>Id</th>
             <th>Name</th>
             <th>DOJ</th>
-            <th>CTC</th>
+            <th style="width:25%">CTC</th>
+            <th style="width:25%">Salary</th>
             <th></th>
         </tr>
     </thead>
@@ -19,7 +20,8 @@
                 <td>@employee.Id</td>
                 <td>@employee.Name</td>
                 <td>@employee.DOJ</td>
-                <td>@employee.CTC</td>
+                <td style="width:25%">@employee.CTC</td>
+                <td style="width:25%">@employee.Salary</td>
                 <td>
                     <a asp-action="SalaryHistory" asp-controller="Employee" asp-route-Eid=@employee.Id>Show Salary History</a>
                 </td>

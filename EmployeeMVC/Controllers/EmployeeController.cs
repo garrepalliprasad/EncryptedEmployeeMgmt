@@ -51,12 +51,21 @@ namespace EmployeeMVC.Controllers
         [HttpGet]
         public IActionResult DepositSalary()
         {
-            MonthlySalary monthlySalary = new MonthlySalary();
-            return View(monthlySalary);
+            MonthlySalaryViewModel monthlySalaryViewModel = new MonthlySalaryViewModel();
+            return View(monthlySalaryViewModel);
         }
         [HttpPost]
-        public async Task<IActionResult> DepositSalary(MonthlySalary monthlySalary)
+        public async Task<IActionResult> DepositSalary(MonthlySalaryViewModel monthlySalaryViewModel)
         {
+            MonthlySalary monthlySalary = new MonthlySalary() 
+            {
+                LC=monthlySalaryViewModel.LC,
+                Month=monthlySalaryViewModel.Month,
+                Employee=new Employee()
+                {
+                    Id=monthlySalaryViewModel.Eid
+                }
+            };
             StringContent content=new StringContent(JsonConvert.SerializeObject(monthlySalary),Encoding.UTF8,"application/json");
             _response =await _http.PostAsync("creditsalary", content);
             if (_response.IsSuccessStatusCode)
@@ -76,12 +85,16 @@ namespace EmployeeMVC.Controllers
         [HttpPost]
         public async Task<IActionResult> AddEmployee(EmployeeViewModel employeeViewModel)
         {
+            var ctcCipher=_utilities.DoubleToCiphertext(employeeViewModel.CTC);
+            var ctcString=_utilities.CiphertextToBase64String(ctcCipher);
+            var salCipher = _utilities.DoubleToCiphertext((employeeViewModel.CTC)/12);
+            var salString = _utilities.CiphertextToBase64String(salCipher);
             Employee employee = new Employee()
             {
                 Name = employeeViewModel.Name,
                 DOJ=employeeViewModel.DOJ,
-                CTC=_utilities.,
-
+                CTC=ctcString,
+                Salary=salString
             };
             StringContent content = new StringContent(JsonConvert.SerializeObject(employee), Encoding.UTF8, "application/json");
             _response = await _http.PostAsync("addemployee", content);

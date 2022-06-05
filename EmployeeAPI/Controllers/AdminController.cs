@@ -1,6 +1,8 @@
-﻿using EncryptedEmployeeMgmt.Models;
+﻿using EmployeeLibrary.Utilities;
+using EncryptedEmployeeMgmt.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Research.SEAL;
 using System.Collections.Generic;
 
 namespace EmployeeAPI.Controllers
@@ -11,11 +13,13 @@ namespace EmployeeAPI.Controllers
     {
         private readonly IEmployeeRepository _employeeRepository;
         private readonly ISalaryRepository _salaryRepository;
+        private readonly Utilities _utilities;
 
         public AdminController(IEmployeeRepository employeeRepository, ISalaryRepository salaryRepository)
         {
             _employeeRepository = employeeRepository;
             _salaryRepository = salaryRepository;
+            _utilities=new Utilities();
         }
         [HttpGet]
         [Route("ctc")]
@@ -56,6 +60,15 @@ namespace EmployeeAPI.Controllers
         [Route("creditsalary")]
         public IActionResult CreditSalary(MonthlySalary salary)
         {
+            var salaryPerMonthString = _employeeRepository.GetEmployeeSalary(salary.Employee.Id);
+            var salaryPerMonthCipher= _utilities.BuildCiphertextFromBase64String(salaryPerMonthString);
+            var oneByThirty = _utilities.DoubleToCiphertext(1 / 30);
+            Ciphertext perdaySalary=new Ciphertext();
+            _utilities.Evaluator.Multiply(salaryPerMonthCipher, oneByThirty,perdaySalary);
+            var workingDays = _utilities.DoubleToCiphertext(30 - salary.LC);
+            Ciphertext monthSalary=new Ciphertext();
+            _utilities.Evaluator.Multiply(workingDays,perdaySalary,monthSalary);
+            salary.Salary = _utilities.CiphertextToBase64String(monthSalary);
             Employee emp=_employeeRepository.GetEmployee(salary.Employee.Id);
             salary.Employee=emp;
             _salaryRepository.AddSalary(salary);

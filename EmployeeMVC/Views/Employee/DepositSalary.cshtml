@@ -1,4 +1,4 @@
-﻿@model MonthlySalary
+﻿@model MonthlySalaryViewModel
 @{
     ViewData["Title"] = "Salary Deposit Form";
 }
@@ -9,18 +9,14 @@
         <select asp-for="Month" asp-items="@Html.GetEnumSelectList<Month>()" class="form-control">
             <option value="">Select Month</option>
         </select>
-    </div>
-    <div class="mt-1">
-        <label asp-for="Salary" class="col-form-label-sm"></label>
-        <input asp-for="Salary" class="form-control" />
-    </div>
+    </div>    
     <div class="mt-1">
         <label asp-for="LC" class="col-form-label-sm">Leave Count</label>
         <input asp-for="LC" class="form-control" />
     </div>
     <div class="mt-1">
-        <label asp-for="Employee.Id" class="col-form-label-sm">EmployeeId</label>
-        <input asp-for="Employee.Id" class="form-control" />
+        <label asp-for="Eid" class="col-form-label-sm">EmployeeId</label>
+        <input asp-for="Eid" class="form-control" />
     </div>
     <button type="submit" class="btn btn-primary mt-1">Deposit</button>
 </form>
