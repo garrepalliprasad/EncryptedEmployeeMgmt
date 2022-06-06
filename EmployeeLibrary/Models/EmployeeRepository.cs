@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using EmployeeLibrary.Utilities;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace EncryptedEmployeeMgmt.Models
@@ -6,6 +7,7 @@ namespace EncryptedEmployeeMgmt.Models
     public class EmployeeRepository:IEmployeeRepository
     {
         private readonly AppDbContext _context;
+        private Utilities utilities = new Utilities();
 
         public EmployeeRepository(AppDbContext context)
         {
@@ -24,7 +26,10 @@ namespace EncryptedEmployeeMgmt.Models
 
         public string GetEmployeeCTC(int id)
         {
-            return _context.Employees.FirstOrDefault(e => e.Id == id).CTC;
+            var stringval= _context.Employees.FirstOrDefault(e => e.Id == id).CTC;
+            var cipherval= utilities.BuildCiphertextFromBase64String(stringval);
+            var val=utilities.CiphertextToDouble(cipherval);
+            return stringval;
         }
 
         public string GetEmployeeSalary(int id)
@@ -34,6 +39,9 @@ namespace EncryptedEmployeeMgmt.Models
 
         public Employee CreateEmployee(Employee employee)
         {
+            var stringval = employee.CTC;
+            var cipherval = utilities.BuildCiphertextFromBase64String(stringval);
+            var val = utilities.CiphertextToDouble(cipherval);
             _context.Employees.Add(employee);
             _context.SaveChanges();
             return employee;

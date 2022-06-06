@@ -2,6 +2,7 @@
 using EmployeeMVC.ViewModels;
 using EncryptedEmployeeMgmt.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Research.SEAL;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -87,6 +88,8 @@ namespace EmployeeMVC.Controllers
         {
             var ctcCipher=_utilities.DoubleToCiphertext(employeeViewModel.CTC);
             var ctcString=_utilities.CiphertextToBase64String(ctcCipher);
+            var salC=_utilities.BuildCiphertextFromBase64String(ctcString);
+            var salD=_utilities.CiphertextToDouble(salC);
             var salCipher = _utilities.DoubleToCiphertext((employeeViewModel.CTC)/12);
             var salString = _utilities.CiphertextToBase64String(salCipher);
             Employee employee = new Employee()
@@ -106,6 +109,26 @@ namespace EmployeeMVC.Controllers
                 return View("~/views/shared/success.cshtml");
             }
             return View(employee);
+        }
+        [HttpGet]
+        public IActionResult CTC()
+        {
+            return View();
+        }
+        [HttpPost]
+        public async Task<IActionResult> GetCTC()
+        {
+            int Eid =Convert.ToInt32(HttpContext.Request.Form["eid"]);
+            HttpResponseMessage res= await _http.GetAsync("ctc/?eid=" + Eid);
+            if (res.IsSuccessStatusCode)
+            {
+                var result=res.Content.ReadAsStringAsync().Result;
+                Ciphertext resultCipher=_utilities.BuildCiphertextFromBase64String(result);
+                double CTC = _utilities.CiphertextToDouble(resultCipher);
+                ViewData["response"] = "Employee CTC with id=" + Eid + " is " + CTC;
+                return View("~/Views/Shared/Success.cshtml");
+            }
+            return View();
         }
     }
 }
