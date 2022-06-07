@@ -4,10 +4,9 @@ using System.Linq;
 
 namespace EncryptedEmployeeMgmt.Models
 {
-    public class EmployeeRepository:IEmployeeRepository
+    public class EmployeeRepository : IEmployeeRepository
     {
         private readonly AppDbContext _context;
-        private Utilities utilities = new Utilities();
 
         public EmployeeRepository(AppDbContext context)
         {
@@ -21,15 +20,12 @@ namespace EncryptedEmployeeMgmt.Models
 
         public Employee GetEmployee(int id)
         {
-            return _context.Employees.FirstOrDefault(e=> e.Id == id);
+            return _context.Employees.FirstOrDefault(e => e.Id == id);
         }
 
         public string GetEmployeeCTC(int id)
         {
-            var stringval= _context.Employees.FirstOrDefault(e => e.Id == id).CTC;
-            var cipherval= utilities.BuildCiphertextFromBase64String(stringval);
-            var val=utilities.CiphertextToDouble(cipherval);
-            return stringval;
+            return _context.Employees.FirstOrDefault(e => e.Id == id).CTC;
         }
 
         public string GetEmployeeSalary(int id)
@@ -39,9 +35,6 @@ namespace EncryptedEmployeeMgmt.Models
 
         public Employee CreateEmployee(Employee employee)
         {
-            var stringval = employee.CTC;
-            var cipherval = utilities.BuildCiphertextFromBase64String(stringval);
-            var val = utilities.CiphertextToDouble(cipherval);
             _context.Employees.Add(employee);
             _context.SaveChanges();
             return employee;

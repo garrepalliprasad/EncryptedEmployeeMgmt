@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EmployeeLibrary.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20220605083448_InitialMigrationForEncryptedSalary")]
-    partial class InitialMigrationForEncryptedSalary
+    [Migration("20220607042206_InitialMigration")]
+    partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -53,9 +53,6 @@ namespace EmployeeLibrary.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<int?>("EmployeeId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("LC")
                         .HasColumnType("int");
 
                     b.Property<int>("Month")

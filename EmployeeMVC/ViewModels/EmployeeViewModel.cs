@@ -8,5 +8,6 @@ namespace EmployeeMVC.ViewModels
         public string Name { get; set; }
         public DateTime DOJ { get; set; }
         public int CTC { get; set; }
+        public int Salary { get; set; }
     }
 }

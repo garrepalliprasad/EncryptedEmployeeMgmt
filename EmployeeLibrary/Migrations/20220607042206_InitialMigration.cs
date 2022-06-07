@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace EmployeeLibrary.Migrations
 {
-    public partial class InitialMigrationForEncryptedSalary : Migration
+    public partial class InitialMigration : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -31,7 +31,6 @@ namespace EmployeeLibrary.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Month = table.Column<int>(nullable: false),
                     Salary = table.Column<string>(nullable: true),
-                    LC = table.Column<int>(nullable: false),
                     EmployeeId = table.Column<int>(nullable: true)
                 },
                 constraints: table =>

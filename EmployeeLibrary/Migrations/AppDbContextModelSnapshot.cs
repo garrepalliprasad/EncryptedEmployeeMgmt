@@ -53,9 +53,6 @@ namespace EmployeeLibrary.Migrations
                     b.Property<int?>("EmployeeId")
                         .HasColumnType("int");
 
-                    b.Property<int>("LC")
-                        .HasColumnType("int");
-
                     b.Property<int>("Month")
                         .HasColumnType("int");
 

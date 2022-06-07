@@ -6,6 +6,7 @@ using Microsoft.Research.SEAL;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
@@ -16,12 +17,12 @@ namespace EmployeeMVC.Controllers
     {
         private readonly HttpClient _http;
         private  HttpResponseMessage _response=null;
-        private readonly Utilities _utilities;
+       
         public EmployeeController()
         {
             _http = new HttpClient();
             _http.BaseAddress = new Uri("https://localhost:44350/api/admin/");
-            _utilities = new Utilities();
+                      
         }
         
         public async Task<IActionResult> Index()
@@ -32,7 +33,22 @@ namespace EmployeeMVC.Controllers
             {
                 var result = _response.Content.ReadAsStringAsync().Result;
                 employees= JsonConvert.DeserializeObject<List<Employee>>(result);
-                return View(employees);
+                List<EmployeeViewModel> emps= new List<EmployeeViewModel> ();
+                foreach (var employee in employees)
+                {
+                    var ctcCipher = Utilities.BuildCiphertextFromBase64String(employee.CTC,Utilities.context);
+                    var salaryCipher=Utilities.BuildCiphertextFromBase64String(employee.Salary,Utilities.context);
+                    var emp=new EmployeeViewModel()
+                    {
+                        Id = employee.Id,
+                        Name = employee.Name,
+                        DOJ= employee.DOJ,
+                        CTC= Convert.ToInt32(Utilities.CiphertextToDouble(ctcCipher)),
+                        Salary=Convert.ToInt32(Utilities.CiphertextToDouble(salaryCipher))
+                    };
+                    emps.Add(emp);
+                }
+                return View(emps);
             }            
             return View();
         }
@@ -52,21 +68,13 @@ namespace EmployeeMVC.Controllers
         [HttpGet]
         public IActionResult DepositSalary()
         {
-            MonthlySalaryViewModel monthlySalaryViewModel = new MonthlySalaryViewModel();
-            return View(monthlySalaryViewModel);
+            MonthlySalary monthlySalary = new MonthlySalary();
+            return View(monthlySalary);
         }
         [HttpPost]
-        public async Task<IActionResult> DepositSalary(MonthlySalaryViewModel monthlySalaryViewModel)
+        public async Task<IActionResult> DepositSalary(MonthlySalary monthlySalary)
         {
-            MonthlySalary monthlySalary = new MonthlySalary() 
-            {
-                LC=monthlySalaryViewModel.LC,
-                Month=monthlySalaryViewModel.Month,
-                Employee=new Employee()
-                {
-                    Id=monthlySalaryViewModel.Eid
-                }
-            };
+           
             StringContent content=new StringContent(JsonConvert.SerializeObject(monthlySalary),Encoding.UTF8,"application/json");
             _response =await _http.PostAsync("creditsalary", content);
             if (_response.IsSuccessStatusCode)
@@ -86,12 +94,10 @@ namespace EmployeeMVC.Controllers
         [HttpPost]
         public async Task<IActionResult> AddEmployee(EmployeeViewModel employeeViewModel)
         {
-            var ctcCipher=_utilities.DoubleToCiphertext(employeeViewModel.CTC);
-            var ctcString=_utilities.CiphertextToBase64String(ctcCipher);
-            var salC=_utilities.BuildCiphertextFromBase64String(ctcString);
-            var salD=_utilities.CiphertextToDouble(salC);
-            var salCipher = _utilities.DoubleToCiphertext((employeeViewModel.CTC)/12);
-            var salString = _utilities.CiphertextToBase64String(salCipher);
+            var ctcCipher=Utilities.DoubleToCiphertext(employeeViewModel.CTC);
+            var ctcString= Utilities.CiphertextToBase64String(ctcCipher);
+            var salCipher = Utilities.DoubleToCiphertext((employeeViewModel.CTC)/12);
+            var salString = Utilities.CiphertextToBase64String(salCipher);
             Employee employee = new Employee()
             {
                 Name = employeeViewModel.Name,
@@ -123,8 +129,8 @@ namespace EmployeeMVC.Controllers
             if (res.IsSuccessStatusCode)
             {
                 var result=res.Content.ReadAsStringAsync().Result;
-                Ciphertext resultCipher=_utilities.BuildCiphertextFromBase64String(result);
-                double CTC = _utilities.CiphertextToDouble(resultCipher);
+                Ciphertext resultCipher= Utilities.BuildCiphertextFromBase64String(result,Utilities.context);
+                double CTC = Utilities.CiphertextToDouble(resultCipher);
                 ViewData["response"] = "Employee CTC with id=" + Eid + " is " + CTC;
                 return View("~/Views/Shared/Success.cshtml");
             }
